@@ -30,12 +30,14 @@ Configure PySQL:
 ```
 cd ./path/to/PySQL
 vi pysql.properties
-<Change "port" value to the port you use for MySQL>
+<Change "server_port" value to the port you use for listening>
 <Change "user" value to whatever username you prefer (root by default)>
 <Change "pass" value to the password for that username within MySQL (admin by default)>
+<Change "dbname" to the database to manipulate>
+<Change other parameters as necessary>
 ```
 
-Generate a certificate for PySQL SSL (optional):
+Generate a certificate for PySQL SSL (only if client uses SSL):
 ```
 python mk_simple_certs.py
 ```
