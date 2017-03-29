@@ -10,6 +10,8 @@ Install required packages (assuming root):
 apt-get update
 apt-get install python2.7
 apt-get install mysql-server
+apt-get install python-mysql.connector
+apt-get install python-openssl
 ```
 
 Clone the repository:
@@ -31,6 +33,11 @@ vi pysql.properties
 <Change "port" value to the port you use for MySQL>
 <Change "user" value to whatever username you prefer (root by default)>
 <Change "pass" value to the password for that username within MySQL (admin by default)>
+```
+
+Generate a certificate for PySQL SSL (optional):
+```
+python mk_simple_certs.py
 ```
 
 Run PySQL:
