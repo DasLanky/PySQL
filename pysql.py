@@ -19,19 +19,20 @@ with open('pysql.properties', 'rb') as f:
         except ValueError:
             print("Properties file invalid line")
 
-print("Initializing server:")
-print("\tHostname: localhost")
-print("\tPort:", int(props['server_port']))
-print("\tMax connections:", int(props['max_connections']))
-print("\tDatabase name:", props['dbname'])
-print("\tDatabase username:", props['user'])
-print("\tDatabase password:", props['pass'])
+print('Initializing server:')
+print('\tHostname: localhost')
+print('\tPort:', int(props['server_port']))
+print('\tMax connections:', int(props['max_connections']))
+print('\tDatabase name:', props['dbname'])
+print('\tDatabase username:', props['user'])
+print('\tDatabase password:', props['pass'])
 
 #Establish connection with port
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 server.bind(('127.0.0.1', int(props['server_port'])))
 server.listen(int(props['max_connections']))
+print('Listening for new connections')
 
 #SSL Decryption
 def _decrypt(line):
@@ -70,6 +71,7 @@ def handle_client(client):
 try:
     while True:
         (client, address) = server.accept()
+        print('New client:', address)
         thread.start_new_thread(handle_client, (client))
 except socket_error as serr:
     if serr.errno != errno.ECONNREFUSED:
