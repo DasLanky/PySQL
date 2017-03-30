@@ -21,8 +21,8 @@ with open('pysql.properties', 'rb') as f:
 
 print('Initializing server:')
 print('\tHostname: localhost')
-print('\tPort: ' + props['server_port']))
-print('\tMax connections: ' + props['max_connections']))
+print('\tPort: ' + props['server_port'])
+print('\tMax connections: ' + props['max_connections'])
 print('\tDatabase name: ' + props['dbname'])
 print('\tDatabase username: ' + props['user'])
 print('\tDatabase password: ' + props['pass'])
