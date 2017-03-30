@@ -10,7 +10,9 @@ import SocketServer
 
 props = {}
 with open('pysql.properties', 'rb') as f:
-    props = dict(map(str.strip, line.split(':', 1)) for l in f.read().splitlines())
+    for line in f:
+        (key, val) = = line.split(':')
+        props[key] = val
 
 
 #Establish connection with port
