@@ -12,7 +12,7 @@ props = {}
 with open('pysql.properties', 'rb') as f:
     for line in f:
         try:
-            (key, val) = line.split(':')
+            (key, val) = line.strip().split('=')
             props[key] = val
         except ValueError:
             print("Properties file invalid line")
@@ -20,7 +20,7 @@ with open('pysql.properties', 'rb') as f:
 
 #Establish connection with port
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-server.bind((client.gethostname()), int(props['server_port']))
+server.bind((server.gethostname()), int(props['server_port']))
 server.listen(int(props['max_connections']))
 
 #SSL Decryption
