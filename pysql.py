@@ -23,9 +23,9 @@ print("Initializing server:")
 print("\tHostname: localhost")
 print("\tPort:", int(props['server_port']))
 print("\tMax connections:", int(props['max_connections']))
-print("\tDatabase name:", int(props['dbname']))
-print("\tDatabase username:", int(props['user']))
-print("\tDatabase password:", int(props['pass']))
+print("\tDatabase name:", props['dbname'])
+print("\tDatabase username:", props['user'])
+print("\tDatabase password:", props['pass'])
 
 #Establish connection with port
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
