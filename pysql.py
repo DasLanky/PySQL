@@ -23,7 +23,7 @@ with open('pysql.properties', 'rb') as f:
 #Establish connection with port
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-server.bind(('127.0.0.1', int(props['port'])))
+server.bind(('127.0.0.1', int(props['server_port'])))
 server.listen(int(props['max_connections']))
 
 #SSL Decryption
