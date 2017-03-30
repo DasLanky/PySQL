@@ -23,7 +23,7 @@ print("Initializing server:")
 print("\tHostname: localhost")
 print("\tPort:", int(props['server_port']))
 print("\tMax connections:", int(props['max_connections']))
-print("\tDatabase name:", int(props['dname']))
+print("\tDatabase name:", int(props['dbname']))
 print("\tDatabase username:", int(props['user']))
 print("\tDatabase password:", int(props['pass']))
 
