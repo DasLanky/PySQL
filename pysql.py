@@ -11,8 +11,11 @@ import SocketServer
 props = {}
 with open('pysql.properties', 'rb') as f:
     for line in f:
-        (key, val) = = line.split(':')
-        props[key] = val
+        try:
+            (key, val) = line.split(':')
+            props[key] = val
+        except ValueError:
+            print("Properties file invalid line")
 
 
 #Establish connection with port
