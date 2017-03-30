@@ -8,6 +8,8 @@ import thread
 
 import SocketServer
 
+from socket import error as socket_error
+
 props = {}
 with open('pysql.properties', 'rb') as f:
     for line in f:
@@ -21,7 +23,8 @@ with open('pysql.properties', 'rb') as f:
 #Establish connection with port
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-server.bind(('127.0.0.1', int(props['max_connections'])))
+server.bind(('127.0.0.1', int(props['port'])))
+server.listen(int(props['max_connections']))
 
 #SSL Decryption
 def _decrypt(line):
@@ -52,12 +55,15 @@ def handle_client(client):
         for line in cursor:
             client.send(_encrypt(line))
         client.send(props['delimiter'])
+    #Close the MySQL connections
+    cursor.close()
+    connection.close()
 
 #Initiate connections with clients
-while True:
-    (client, address) = server.accept()
-    thread.start_new_thread(handle_client, (client))
-
-#Close the MySQL connections
-cursor.close()
-connection.close()
+try:
+    while True:
+        (client, address) = server.accept()
+        thread.start_new_thread(handle_client, (client))
+except socket_error as serr:
+    if serr.errno != errno.ECONNREFUSED:
+        raise serr
