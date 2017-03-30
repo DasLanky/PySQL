@@ -21,11 +21,11 @@ with open('pysql.properties', 'rb') as f:
 
 print('Initializing server:')
 print('\tHostname: localhost')
-print('\tPort:', int(props['server_port']))
-print('\tMax connections:', int(props['max_connections']))
-print('\tDatabase name:', props['dbname'])
-print('\tDatabase username:', props['user'])
-print('\tDatabase password:', props['pass'])
+print('\tPort: ' + props['server_port']))
+print('\tMax connections: ' + props['max_connections']))
+print('\tDatabase name: ' + props['dbname'])
+print('\tDatabase username: ' + props['user'])
+print('\tDatabase password: ' + props['pass'])
 
 #Establish connection with port
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -45,7 +45,7 @@ def _encrypt(line):
     return line
 
 #Forward-declaration of client handler
-def handle_client(client):
+def handle_client(client, *args):
     #Establish connection with MySQL
     connection = mysql.connector.connect(
                     user=props['user'],
@@ -72,7 +72,7 @@ try:
     while True:
         (client, address) = server.accept()
         print('New client:', address)
-        thread.start_new_thread(handle_client, (client))
+        thread.start_new_thread(handle_client, (client, 1))
 except socket_error as serr:
     if serr.errno != errno.ECONNREFUSED:
         raise serr
