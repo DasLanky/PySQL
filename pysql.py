@@ -10,6 +10,8 @@ import SocketServer
 
 from socket import error as socket_error
 
+BUFFER_SIZE = 1
+
 props = {}
 with open('pysql.properties', 'rb') as f:
     for line in f:
@@ -25,12 +27,11 @@ print('\tPort: ' + props['server_port'])
 print('\tMax connections: ' + props['max_connections'])
 print('\tDatabase name: ' + props['dbname'])
 print('\tDatabase username: ' + props['user'])
-print('\tDatabase password: ' + props['pass'])
 
 #Establish connection with port
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-server.bind(('127.0.0.1', int(props['server_port'])))
+server.bind(('', int(props['server_port'])))
 server.listen(int(props['max_connections']))
 print('Listening for new connections')
 
@@ -43,6 +44,17 @@ def _decrypt(line):
 def _encrypt(line):
     #TODO: Implement
     return line
+    
+#Forward-declaration of client reader
+def readall(client):
+    try:
+        data = client.recv(BUFFER_SIZE)
+        while ';' not in str(data):
+            data = data + client.recv(BUFFER_SIZE)
+    except socket.timeout:
+        print("Connection timeout")
+        return None
+    return data
 
 #Forward-declaration of client handler
 def handle_client(client, *args):
@@ -54,15 +66,21 @@ def handle_client(client, *args):
                     database=props['dbname']
     )
     cursor = connection.cursor()
-    #Main loop
-    while True:
-        line = ""
-        while ';' not in line:
-            line = line + _decrypt(client.readline())
-        cursor.execute(line)
-        for line in cursor:
-            client.send(_encrypt(line))
-        client.send(props['delimiter'])
+    request = readall(client)
+    if request == None:
+        cursor.close()
+        connection.close()
+        return false
+    request = _decrypt(request)
+    print('Executing command: ' + request)
+    cursor.execute(request)
+    client_writer = client.makefile(mode='w')
+    for l in cursor:
+        print(str(l))
+        client_writer.write(_encrypt(str(l)))
+    client_writer.write(props['delimiter'])
+    client_writer.flush()
+    client.close()
     #Close the MySQL connections
     cursor.close()
     connection.close()
